@@ -1,1 +1,3 @@
-print("holsa")
+palabra="hola"
+
+print(palabra.find(" "))
