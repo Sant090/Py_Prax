@@ -35,11 +35,37 @@ def listas(a):
             None
     return b
 
-
 def seguro(a):
     temp=listas(a)
     sorted(temp)
     return temp[-1]
 
-
+def promedio(a):
+    y=0
+    for x in a:
+        y+=x
+    return y/len(a)
     
+    
+def programa(a):
+    resultado=dict(promedio=promedio(a),maximo=seguro(a))
+    return resultado
+
+lista=[]
+contador=0
+while True:
+    try:
+        largo=int(input("cuantos elementos va a agregar a la lista: "))
+        break
+    except ValueError:
+        print("el valor ingresado es erroneo, solo ingrese un valor numerico")
+
+while not largo == contador:
+    try:
+        temp=int(input(f"agregue el valor del elemento {contador+1}: "))
+        lista.append(temp)
+        contador+=1
+    except ValueError:
+        print("el valor ingresado es erroneo, solo ingrese un valor numerico")
+        
+print(programa(lista))
