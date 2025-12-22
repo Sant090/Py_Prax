@@ -71,7 +71,7 @@ for x in sensor2:
 
 prom2/=3
 print(f"promedio del sensor 2 es {prom2}")"""
-
+"""
 
 datos = [2.3, 2.5, 2.4, 5.8, 2.6]
 datos_corregidos=[]
@@ -86,3 +86,4 @@ for num in datos_corregidos:
         prom+=num
 prom=prom/4
 print(f"el promedio de la lista es equivale a: {prom}")
+"""
