@@ -33,8 +33,6 @@ def normalizar(a):
     return (a-np.min(a))/(np.max(a)-np.min(a))
 #print(normalizar(x))
 
-print("print")
-
 ar=np.random.uniform(110, 120, 100)
 print(ar)
 print(ar.mean)

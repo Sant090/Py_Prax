@@ -18,8 +18,6 @@ def validacion(a):
 def analisis(a):
     if not len(a)==0:
         prom=0
-        min=0
-        max=0
         orden=validacion(a)
         for x in orden:
             prom+=x
