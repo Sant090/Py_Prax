@@ -47,4 +47,4 @@ pred = modelo.predict([[6000, 5000]])
 print("Predicción:", pred)
 
 
-"""revision git"""
+"""revision github prueba"""

@@ -32,5 +32,3 @@ print(np.mean(ar))
 print(ar[ar>np.mean(ar)])
 print((ar-np.min(ar))/((np.max(ar))-(np.min(ar))))
 
-
-)
