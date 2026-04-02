@@ -13,7 +13,7 @@ df.to_csv("Datos/Practica.csv", index=False)
 df = pd.read_excel("Datos/Demanda_Energia_SIN_2025.xlsx", header=3)
 print(df.head())
 
-print(df["Generación kWh"])
+print(df["Generación kWh"].describe())
 
 y=df["Generación kWh"]
 
