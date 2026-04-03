@@ -26,13 +26,29 @@ plt.title("Generación de energía a lo largo del tiempo")
 plt.show()
 
 """
-dff=pd.read_csv("Datos/PronosticoYDemanda.csv")
 
-print(dff.head())
-mercados=dff["MercadoComercializacionOperativo"].unique()
+df=pd.read_csv("Datos/PronosticoYDemanda.csv")
+mercados=df["MercadoComercializacionOperativo"].unique()
+
+print("Proceso iniciado")
 
 
 for i in mercados:
-    df=dff[dff["MercadoComercializacionOperativo"] == i]
-    df.to_csv(f"Datos/finalizados/{i}.csv", index=False)
+
+    dff=pd.read_csv(f"Datos/DatosProcesados/OrganizadosFecha/{i}.csv")
+
+    final=pd.DataFrame()
+    x=0
+    for j in range(8760):
+        df=dff.iloc[(x+0):(x+24)]
+        df= df.sort_values(by="Periodo")
+        final=pd.concat([final, df], ignore_index=True)
+        x+=24
+        df=0
+
+    final.to_csv(f"Datos/Final/{i}.csv", index=False)
+    print(F"Proceso completado para {i}")
+
+
+print("Proceso completado")
 
