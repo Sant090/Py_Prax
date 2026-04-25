@@ -25,7 +25,7 @@ plt.ylabel("Generación kWh")
 plt.title("Generación de energía a lo largo del tiempo") 
 plt.show()
 
-"""
+
 
 df=pd.read_csv("Datos/PronosticoYDemanda.csv")
 mercados=df["MercadoComercializacionOperativo"].unique()
@@ -52,3 +52,20 @@ for i in mercados:
 
 print("Proceso completado")
 
+
+"""
+
+df=pd.read_csv("Datos/Final/MC-Antioquia.csv")
+
+
+y=df["DemandaAtendida"]
+
+print(y.describe())
+
+t=np.arange(len(y))
+
+plt.plot(t,y)
+plt.xlabel("Tiempo")
+plt.ylabel("Generación kWh")
+plt.title("Generación de energía a lo largo del tiempo") 
+plt.show()

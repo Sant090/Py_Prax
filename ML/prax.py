@@ -25,26 +25,26 @@ plt.shot()
 """
 
 
-from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
 
-# Features: [frecuencia, amplitud]
-X = np.array([
-    [50, 1],
-    [60, 1.2],
-    [50, 0.9],
-    [200, 3]
-])
+# Datos
+X = np.array([[1,110], [2,120], [3,130], [4,140]])
+y = np.array([100, 150, 200, 250])
 
-# 0 = normal, 1 = anomalía
-y = np.array([0, 0, 0, 1])
+# Escalar
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
 
-modelo = KNeighborsClassifier(n_neighbors=3)
-modelo.fit(X, y)
+# Modelo
+modelo = LinearRegression()
+modelo.fit(X_scaled, y)
 
-pred = modelo.predict([[6000, 5000]])
+# Predicción
+nuevo = scaler.transform([[5,150]])
+pred = modelo.predict(nuevo)
 
-print("Predicción:", pred)
-
+print(pred)
 
 """revision github prueba"""
