@@ -1,26 +1,31 @@
+import joblib
+from sklearn.model_selection import train_test_split
 import torch
 import torch.nn as nn
+from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-import joblib
 
-df = pd.read_csv("Redes/p1.csv")
+df=pd.read_csv("Redes/p2.csv")
+df = df[df["p"] > 0]
 
-x = df[["v","i","freq"]]
-y= np.log1p(df[["pot"]])
+df["log_r"] = np.log(df["r"])
+df["log_v"] = np.log(df["v"])
+x = df[["log_r","log_v"]]
+
+df["log_p"] = np.log(df["p"])
+y = df[["log_p"]]
 
 xt,xe,yt,ye = train_test_split(x,y,test_size=0.2,random_state=42)
 
 scaler_x = StandardScaler()
-scaler_y= StandardScaler()
+scaler_y = StandardScaler()
 
-xt=scaler_x.fit_transform(xt)
-yt=scaler_y.fit_transform(yt)
+xt = scaler_x.fit_transform(xt)
+yt = scaler_y.fit_transform(yt)
 
-xe = scaler_x.transform(xe)
-ye = scaler_y.transform(ye)
+xe=scaler_x.transform(xe)
+ye=scaler_y.transform(ye)
 
 xt = torch.tensor(xt, dtype=torch.float32)
 yt = torch.tensor(yt, dtype=torch.float32)
@@ -29,89 +34,53 @@ ye = torch.tensor(ye, dtype=torch.float32)
 
 
 modelo = nn.Sequential(
-
-    nn.Linear(3,16),
-    nn.ReLU(),
-    nn.Linear(16,8),
-    nn.ReLU(),
-    nn.Linear(8,1)
-
+    nn.Linear(2,64),
+    nn.SiLU(),
+    nn.Linear(64,64),
+    nn.SiLU(),
+    nn.Linear(64,32),
+    nn.SiLU(),
+    nn.Linear(32,1)
 )
-
-
-#para prediccion
 
 loss_fn = nn.MSELoss()
-
 optimizer = torch.optim.Adam(
-
     modelo.parameters(),
-
     lr=0.001
-
 )
 
 
-#entrenamiento
-
-epochs = 500
-
+epochs = 300
 for epoch in range(epochs):
-
     pred = modelo(xt)
-
     loss = loss_fn(pred,yt)
-
     optimizer.zero_grad()
-
     loss.backward()
-
     optimizer.step()
-
     if epoch%50==0:
-
         print(epoch,loss.item())
 
 
 
-#evalua
-
 modelo.eval()
-
 with torch.no_grad():
-
-    pred_test = modelo(xt)
-
-    loss_test = loss_fn(pred_test,yt)
-
-
-
+    pred_test = modelo(xe)
+    loss_test = loss_fn(pred_test,ye)
 print("Loss prueba:",loss_test.item())
-
-
-#normaliza
-
-pred_real = scaler_y.inverse_transform(
-
+pred_log = scaler_y.inverse_transform(
     pred_test.numpy()
-
 )
 
-Y_real = scaler_y.inverse_transform(
-
-    yt.numpy()
-
+real_log = scaler_y.inverse_transform(
+    ye.numpy()
 )
 
-print()
-
-
-
+pred_real = np.exp(pred_log)
+Y_real = np.exp(real_log)
 
 
 
 print("Primeras predicciones:")
-
 for real,pred in zip(Y_real[:10],pred_real[:10]):
 
     print(
@@ -120,17 +89,17 @@ for real,pred in zip(Y_real[:10],pred_real[:10]):
 
         f"Predicho = {pred[0]:8.2f}"
 
+        f"  error porcentual = {abs((real[0] - pred[0]) / real[0] * 100):8.2f}%"
     )
 
 
 
-#guardar
 
 torch.save(
 
     modelo.state_dict(),
 
-    "modelo.pt"
+    "Redes/modelo.pt"
 
 )
 
@@ -138,15 +107,15 @@ joblib.dump(
 
     scaler_x,
 
-    "scaler_X.pkl"
-
+    "Redes/scaler_X.pkl"
+    
 )
 
 joblib.dump(
 
     scaler_y,
 
-    "scaler_Y.pkl"
+    "Redes/scaler_Y.pkl"
 
 )
 
