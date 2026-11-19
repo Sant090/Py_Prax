@@ -6,11 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 
-
 from sklearn.metrics import r2_score, mean_absolute_error
-
-
-#Limpieza de datos y ordenamiento
 
 df=pd.read_csv("datasets/GeneracionEspinalOrdenado.csv")
 
@@ -31,7 +27,7 @@ df3 = df3.dropna()
 print(df3)
 
 
-#modelo ml
+
 
 Entradas = ['Irradiacion', 'Temperatura', 'Humedad',"Hora"]
 x = df3[Entradas]
@@ -55,9 +51,18 @@ predicciones_escaladas = modelo.predict(scalerx_p)
 
 predicciones_reales = scalery.inverse_transform(predicciones_escaladas)
 
+
+pred_rf = modelo.predict(x_p)
+print(f"R²: {r2_score(y_p, predicciones_reales)}")
+print(f"MAE: {mean_absolute_error(y_p, predicciones_reales)}")
+
+
+
+
+
 """
 
-Entradas = ["Irradiacion", "Temperatura", "Humedad"]
+Entradas = ["Irradiacion", "Temperatura", "Humedad","Hora"]
 x = df3[Entradas]
 y = df3["Generacion"]
 
@@ -65,7 +70,10 @@ x_e, x_p, y_e, y_p = train_test_split(x, y, test_size=0.2, random_state=67)
 
 modelo_rf = RandomForestRegressor(n_estimators=200, random_state=67, n_jobs=None)
 modelo_rf.fit(x_e, y_e)
+
+pred_rf = modelo.predict(x_p)
+print(f"R²: {r2_score(y_p, pred_rf)}")
+print(f"MAE: {mean_absolute_error(y_p, pred_rf)}")
+
+
 """
-pred_rf = modelo.predict(scalerx_p)
-print(f"R²: {r2_score(scalery_p, pred_rf)}")
-print(f"MAE: {mean_absolute_error(scalery_p, pred_rf)}")
